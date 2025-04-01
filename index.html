@@ -1,0 +1,53 @@
+<title>Flash Cards</title>
+<link rel="stylesheet" href="./styles/flash-cards.css" />
+<script defer src="./external/md-block@0.0.1.js" type="module"></script>
+<script defer src="./src/main.js" type="module"></script>
+
+<div id="deck-controls">
+  <select id="deck">
+    <option value="" selected disabled>Select a deck</option>
+  </select>
+  <input id="deck-input" type="file" accept=".csv" multiple hidden />
+  <button id="new-deck">
+    +
+  </button>
+  <button id="remove-deck" disabled>
+    −
+  </button>
+</div>
+
+<div id="slide-display"></div>
+
+<div id="controls">
+  <button id="prev" title="Previous flash card" disabled>
+    ⬅︎
+  </button>
+  <label title="Shuffle">
+    🔀
+    <input type="checkbox" id="shuffle" disabled />
+  </label>
+  <span id="slide-progress" data-disabled="true">
+    -/-
+  </span>
+  <label title="Toggle correct">
+    ✅
+    <input type="checkbox" id="correct" disabled />
+  </label>
+  <label title="Repeat">
+    🔁
+    <input type="checkbox" id="endless" disabled />
+  </label>
+  <button id="next" title="Next flash card" disabled>
+    ➡︎
+  </button>
+</div>
+
+<template id="slide-template">
+  <div id="slide">
+    <input id="toggle" type="checkbox" />
+    <div id="content">
+      <md-block id="question"></md-block>
+      <md-block id="answer"></md-block>
+    </div>
+  </div>
+</template>
