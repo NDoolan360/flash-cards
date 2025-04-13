@@ -18,10 +18,10 @@ export const isDeck = (deck) =>
   deck.slides.every(isSlide);
 
 /**
-* @typedef {Object} Slide
-* @property {string} question
-* @property {string} answer
-*/
+ * @typedef {Object} Slide
+ * @property {string} question
+ * @property {string} answer
+ */
 
 /**
  * @param {unknown} slide

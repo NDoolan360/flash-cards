@@ -1,51 +1,55 @@
+import { setupControl } from "../control.js";
 import { events } from "../events.js";
 import { getAllStoredDecks, getDeckFromStorage } from "../storage.js";
 import { parseFromFile } from "./parse.js";
 
 /**
- * @param {HTMLElement | null} element
+ * @param {HTMLSelectElement | null} selectElement
  * @param {IDBDatabase} db
  * @returns {Promise<void>}
  */
-export const setupDeckList = async (element, db) => {
-  // validate the element is a select element
-  if (!(element instanceof HTMLSelectElement)) {
-    throw new Error("Element is not a select element");
-  }
+export const setupDeckSelect = async (selectElement, db) => {
+  if (!selectElement) throw new Error("Select element is not found");
+
   // populate options from local storage
   const decks = await getAllStoredDecks(db);
   for (const deckName of decks) {
-    createNewOption(element, deckName);
+    createNewOption(selectElement, deckName);
   }
+
   // set the selected option from query parameter
   const queryDeck = new URL(window.location.href).searchParams.get("deck");
   const deck = await getDeckFromStorage(db, queryDeck ?? "");
-  updateSelectedOption(element, deck?.name ?? "");
+  updateSelectedOption(selectElement, deck?.name ?? "");
   if (deck) {
     events.deckUpdate.dispatch(deck);
   }
-  element.addEventListener("change", async () => {
-    updateSelectedOption(element, element.value);
-    const deck = await getDeckFromStorage(db, element.value);
+
+  selectElement.addEventListener("change", async () => {
+    updateSelectedOption(selectElement, selectElement.value);
+    const deck = await getDeckFromStorage(db, selectElement.value);
     events.deckUpdate.dispatch(deck);
   });
+
   events.newDecks.subscribe(async (files) => {
     if (files.length === 0) return;
     for (const [i, file] of [...files].entries()) {
       const newDeck = await parseFromFile(file);
       if (newDeck !== undefined) {
-        createNewOption(element, newDeck.name);
+        createNewOption(selectElement, newDeck.name);
         if (i === 0) {
-          updateSelectedOption(element, newDeck.name);
+          updateSelectedOption(selectElement, newDeck.name);
           events.deckUpdate.dispatch(newDeck);
         }
       }
     }
   });
+
   // listen for removed decks
-  events.deckRemoved.subscribe((deckName) => {
-    removeOption(element, deckName);
-    updateSelectedOption(element, "");
+  events.removeDeck.subscribe((deckName) => {
+    removeOption(selectElement, deckName);
+    updateSelectedOption(selectElement, "");
+    events.deckUpdate.dispatch(undefined);
   });
 };
 
