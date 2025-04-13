@@ -1,13 +1,49 @@
 button,
-select {
+select,
+label:has(input[type="checkbox"]) {
   min-height: 1.5rem;
   min-width: 1.5rem;
   padding: 0 0.25em;
-  border-radius: 99px;
+  border-radius: 1.5rem;
   font-size: 16px;
-  color: var(--comment, currentColor);
-  background-color: var(--background, transparent);
-  border: 1px solid var(--comment, currentColor);
+  text-align: center;
+  color: var(--foreground, #DDD);
+  background-color: var(--background, #333);
+  border: 1px solid var(--foreground, #DDD);
+
+  @media (prefers-color-scheme: light) {
+    color: var(--background, #333);
+    background-color: var(--foreground, #DDD);
+    border: 1px solid var(--background, #333);
+  }
+}
+
+label:has(input[type="checkbox"]) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: unset;
+
+  input[type="checkbox"] {
+    position: absolute;
+    inset: -1px;
+    margin: unset;
+    z-index: -1;
+    appearance: none;
+  }
+
+  &:has(input[type="checkbox"]:checked) {
+    background-color: var(--checked-colour, var(--accent, royalblue));
+    border-color: var(--checked-colour, var(--accent, royalblue));
+  }
+
+  &:has(input[type="checkbox"]:focus-visible) {
+    outline: Highlight auto 1px;
+    outline: -webkit-focus-ring-color auto 1px;
+    outline-offset: 2px;
+  }
 }
 
 :has(>*>#deck-controls) {
@@ -29,45 +65,28 @@ select {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  justify-content: center;
-  margin: var(--space-md, 1rem) 0;
+  justify-content: space-between;
+  margin: 1rem 0;
 }
 
-label:has(*:disabled),
-button:disabled {
+label:has(>:disabled),
+progress[aria-disabled="true"] {
   opacity: 0.3;
 }
 
 #deck-controls,
-#controls {
+#slide-controls {
   display: flex;
-  gap: var(--space-md, 1rem);
-}
-
-#slide-display {
-  position: relative;
-  flex-grow: 1;
-  width: 100%;
-  margin: var(--space-md, 1rem);
+  gap: 1rem;
 }
 
 #slide {
-  position: absolute;
-  inset: 0;
-  margin: auto;
+  position: relative;
   height: 20rem;
+  width: 100%;
+  margin: auto;
   max-width: 35rem;
   perspective: 1000px;
-}
-
-#slide #toggle:checked+#content {
-  transform: rotateY(-180deg);
-  transition: transform 0.5s;
-}
-
-#slide #toggle:focus-visible+#content {
-  outline: var(--cyan, currentColor) auto 1px;
-  outline-offset: 2px;
 }
 
 #toggle {
@@ -86,15 +105,26 @@ button:disabled {
   color: var(--background, #333);
 
   @media (prefers-color-scheme: light) {
-    background-color: var(--background, #DDD);
-    color: var(--foreground, #333);
-    border: 1px solid var(--foreground, #333);
+    color: var(--background, #333);
+    background-color: var(--foreground, #DDD);
+    border: 1px solid var(--background, #333);
   }
 
-  border-radius: var(--radius, 1rem);
+  border-radius: 1rem;
 
   transition: transform 1s;
   transform-style: preserve-3d;
+}
+
+#toggle:checked+#content {
+  transform: rotateY(-180deg);
+  transition: transform 0.5s;
+}
+
+#toggle:focus-visible+#content {
+  outline: Highlight auto 1px;
+  outline: -webkit-focus-ring-color auto 1px;
+  outline-offset: 2px;
 }
 
 #question,
@@ -102,12 +132,12 @@ button:disabled {
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
-  user-select: none;
-  padding: var(--space-md, 1rem);
+  padding: 1rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 #answer {
@@ -117,17 +147,16 @@ button:disabled {
 #question *,
 #answer * {
   all: revert;
-
   display: flex;
   flex-flow: column nowrap;
 }
 
-#slide[data-correct] #content {
-  outline: 0.5rem solid var(--green, forestgreen);
+#content[data-correct] {
+  outline: 0.5rem solid var(--green, mediumseagreen);
 }
 
-#slide[data-correct] #question::after,
-#slide[data-correct] #answer::after {
+#content[data-correct] #question::after,
+#content[data-correct] #answer::after {
   content: "✅";
   position: absolute;
   top: 0;
@@ -136,19 +165,19 @@ button:disabled {
   line-height: 2rem;
 }
 
-#controls {
+#slide-controls {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2rem;
 }
 
-#slide-progress {
-  display: flex;
-  justify-content: center;
-  min-width: 3rem;
+#progress {
+  margin-top: 1rem;
+  width: 100%;
+  accent-color: var(--accent, royalblue);
 
-  &[data-disabled="true"] {
-    opacity: 0.3;
+  &[data-complete="true"] {
+    accent-color: var(--green, mediumseagreen);
   }
 }

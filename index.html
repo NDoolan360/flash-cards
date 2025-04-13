@@ -1,53 +1,83 @@
 <title>Flash Cards</title>
 <link rel="stylesheet" href="./styles/flash-cards.css" />
-<script defer src="./external/md-block@0.0.1.js" type="module"></script>
+<script defer src="./external/md-block@0.0.2.js" type="module"></script>
 <script defer src="./src/main.js" type="module"></script>
 
 <div id="deck-controls">
-  <select id="deck">
-    <option value="" selected disabled>Select a deck</option>
-  </select>
-  <input id="deck-input" type="file" accept=".csv" multiple hidden />
-  <button id="new-deck">
-    +
-  </button>
-  <button id="remove-deck" disabled>
-    −
-  </button>
+  <label
+    title="Select a deck"
+    aria-label="Select a deck"
+  >
+    <select id="deck-select" disabled>
+      <option value="" selected disabled>Select a deck</option>
+    </select>
+    <input id="deck-input" type="file" accept=".csv" multiple disabled hidden />
+  </label>
+  <label title="Add a new deck" aria-label="Add a new deck">
+    <button id="new-deck" disabled>+</button>
+  </label>
+  <label title="Remove the current deck" aria-label="Remove the current deck">
+    <button id="remove-deck" disabled>-</button>
+  </label>
 </div>
 
-<div id="slide-display"></div>
+<noscript>You need to enable Javascript to run this app.</noscript>
 
-<div id="controls">
-  <button id="prev" title="Previous flash card" disabled>
-    ⬅︎
-  </button>
-  <label title="Shuffle">
-    🔀
-    <input type="checkbox" id="shuffle" disabled />
-  </label>
-  <span id="slide-progress" data-disabled="true">
-    -/-
-  </span>
-  <label title="Toggle correct">
-    ✅
-    <input type="checkbox" id="correct" disabled />
-  </label>
-  <label title="Repeat">
-    🔁
-    <input type="checkbox" id="endless" disabled />
-  </label>
-  <button id="next" title="Next flash card" disabled>
-    ➡︎
-  </button>
-</div>
-
-<template id="slide-template">
-  <div id="slide">
-    <input id="toggle" type="checkbox" />
-    <div id="content">
-      <md-block id="question"></md-block>
-      <md-block id="answer"></md-block>
-    </div>
+<div id="slide">
+  <input id="toggle" type="checkbox" disabled />
+  <div id="content" hidden>
+    <md-block id="question" aria-label="Question" aria-hidden="false"></md-block>
+    <md-block id="answer" aria-label="Answer" aria-hidden="true"></md-block>
   </div>
-</template>
+</div>
+
+<div id="slide-controls">
+  <label
+    title="Previous card (Left Arrow Key)"
+    aria-label="Previous card"
+    aria-keyshortcuts="ArrowLeft"
+  >
+    <button id="prev" disabled>⬅︎</button>
+  </label>
+  <label
+    title="Next card (Right Arrow Key)"
+    aria-label="Next card"
+    aria-keyshortcuts="ArrowRight"
+  >
+    <button id="next" disabled>➡︎</button>
+  </label>
+  <label
+    title="Flip card (Shift+Space)"
+    aria-label="Flip card"
+    aria-keyshortcuts="Shift+Space"
+  >
+    <button id="flip" disabled>↪</button>
+  </label>
+  <label
+    title="Mark correct (Shift+Enter)"
+    aria-label="Mark correct"
+    aria-keyshortcuts="Shift+Enter"
+    style="--checked-colour: var(--green);"
+  >
+    <input type="checkbox" id="correct" disabled />
+    ✅
+  </label>
+  <label
+    title="Shuffle deck (Shift+S)"
+    aria-label="Shuffle deck"
+    aria-keyshortcuts="Shift+S"
+  >
+    <input type="checkbox" id="shuffle" disabled />
+    🔀
+  </label>
+  <label
+    title="Loop deck (Shift+L)"
+    aria-label="Loop deck"
+    aria-keyshortcuts="Shift+L"
+  >
+    <input type="checkbox" id="loop" disabled />
+    🔁
+  </label>
+</div>
+
+<progress id="progress" value="0" max="0" aria-disabled="true"></progress>
