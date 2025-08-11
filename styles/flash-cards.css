@@ -144,11 +144,16 @@ progress[aria-disabled="true"] {
   transform: rotateY(180deg);
 }
 
-#question *,
-#answer * {
+#question :not(img),
+#answer :not(img) {
   all: revert;
   display: flex;
   flex-flow: column nowrap;
+}
+
+#question img,
+#answer img {
+  background: none;
 }
 
 #content[data-correct] {
